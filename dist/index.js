@@ -130,7 +130,7 @@ var ChainUtils = class {
     const chain = this.chainData.find(
       (c) => c.name.toLowerCase() === normalizedName.toLowerCase()
     );
-    return chain?.gasToken || null;
+    return (chain == null ? void 0 : chain.gasToken) || null;
   }
   validateChain(chainName) {
     if (!chainName) {
@@ -190,6 +190,7 @@ async function fetchChains() {
 }
 var tokenCache = {};
 async function fetchTokenConfig(chainId, token) {
+  var _a, _b;
   const cacheKey = `${chainId}-${token.toLowerCase()}`;
   if (tokenCache[cacheKey]) {
     console.log(`Cache hit for ${cacheKey}`);
@@ -200,7 +201,7 @@ async function fetchTokenConfig(chainId, token) {
     const url = `https://api.nitroswap.routernitro.com/token?&chainId=${chainId}&symbol=${tokenSymbol}`;
     try {
       const response = await axios.get(url);
-      const tokenData = response.data?.data?.[0];
+      const tokenData = (_b = (_a = response.data) == null ? void 0 : _a.data) == null ? void 0 : _b[0];
       if (tokenData) {
         tokenCache[cacheKey] = {
           address: tokenData.address,
@@ -388,12 +389,12 @@ var checkBalances = async (wallet, tokenConfig, amountIn) => {
 var handleTransaction = async (wallet, txResponse, blockExplorer, callback) => {
   const tx = await wallet.sendTransaction(txResponse.txn);
   const receipt = await tx.wait();
-  if (!receipt?.status) {
+  if (!(receipt == null ? void 0 : receipt.status)) {
     throw new Error("Transaction failed");
   }
   const txExplorerUrl = blockExplorer ? `${blockExplorer}/tx/${tx.hash}` : tx.hash;
   const successMessage = `Swap completed successfully! Txn: ${txExplorerUrl}`;
-  callback?.({ text: successMessage });
+  callback == null ? void 0 : callback({ text: successMessage });
   return true;
 };
 var executeSwapAction = {
@@ -448,7 +449,7 @@ var executeSwapAction = {
       return false;
     } catch (error) {
       elizaLogger.log(`Error during executing swap: ${error.message}`);
-      callback?.({ text: `Error during swap: ${error.message}` });
+      callback == null ? void 0 : callback({ text: `Error during swap: ${error.message}` });
       return false;
     }
   },

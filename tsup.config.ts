@@ -8,6 +8,7 @@ export default defineConfig({
     splitting: false,
     format: ["esm"], // Ensure you're targeting CommonJS
     external: [
+        "@elizaos/core",
         "dotenv", // Externalize dotenv to prevent bundling
         "fs", // Externalize fs to use Node.js built-in module
         "path", // Externalize other built-ins if necessary
